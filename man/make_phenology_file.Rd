@@ -39,5 +39,5 @@ where the 'solar year' starts on December 21. Therefore, in the output, the onse
 For now only a linear shape is available.
 }
 \examples{
-make_phenology_file("pheno_01.csv", 120, 134, 280, 310)
+\dontrun{make_phenology_file("pheno_01.csv", 120, 134, 280, 310)}
 }

@@ -1,0 +1,42 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# agroforlight
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+The goal of agroforlight is to provide functions that enable processing results from the 3-D tool for agroforestry light simulations available at [<https://agroforestry.ugent.be>].
+
+[![Screenshot from https://agroforestry.ugent.be](man/figures/printscreen.png)](https://agroforestry.ugent.be)
+
+## Installation
+
+You can install the development version of agroforlight from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("tdeswaef/agroforlight")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(agroforlight)
+## basic example code
+```

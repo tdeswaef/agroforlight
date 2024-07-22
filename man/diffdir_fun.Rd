@@ -24,7 +24,7 @@ A tibble with:
 \item rad_diff: diffuse component of global radiation in W m-2
 \item rad_dir: direct component of global radiation in W m-2
 \item theta: sun angle from the zenith in radians (0 at the zenith and PI/2 at the horizon)
-\item phi: sun azimuth in radians (direction along the horizon, measured from north to east), e.g. 0 is north and $\frac{\pi}{4}$ northeast
+\item phi: sun azimuth in radians (direction along the horizon, measured from north to east), e.g. 0 is north and \eqn{\frac{\pi}{4}} northeast
 }
 }
 \description{

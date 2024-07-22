@@ -21,7 +21,7 @@
 #' @export
 #'
 #' @examples
-#' make_phenology_file("pheno_01.csv", 120, 134, 280, 310)
+#' \dontrun{make_phenology_file("pheno_01.csv", 120, 134, 280, 310)}
 make_phenology_file <- function(filename, doy_start_flush, doy_stop_flush,
                                 doy_start_fall, doy_stop_fall, shape = "linear"){
   if(shape == "linear"){
