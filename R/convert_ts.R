@@ -6,6 +6,8 @@
 #' @param treescene_dir_file path to the file of the app output for direct light
 #' @param treescene_diff_file path to the file of the app output for diffuse light
 #' @param start_year the starting year of the agroforestry simulation.
+#' @param lat Latitude of the field in °
+#' @param lon Longitude of the field in °
 #'
 #' @import lubridate
 #' @import dplyr
@@ -22,7 +24,7 @@
 #' @export
 #'
 #'
-convert_data_ts <- function(conv_factors, treescene_dir_file, treescene_diff_file, start_year){
+convert_data_ts <- function(conv_factors, treescene_dir_file, treescene_diff_file, start_year, lat, lon){
 
   origin <- lubridate::as_date(paste0(start_year, "-12-21"))
 

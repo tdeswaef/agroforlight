@@ -1,0 +1,128 @@
+---
+title: "Example processing a time series"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{example-timeseries}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Set up a phenology file
+
+In temperate deciduous tree species, trees do not bear leaves in Winter, after which leaves appear in Spring, stay present all Summer, and fall off in Autumn. The presence of leaves has an important impact on the light interception by trees, and is therefore part of the 3-D simulation tool available on <https://agroforestry.ugent.be>. The presence of leaves is represented by a value between 0 and 1, where 0 corresponds to no leaves, and 1 corresponds to a fully developed canopy. The extent of canopy size can be adjusted using the `Trees` parameters `Leaf length`, `Leaf width`, `Leaves per twig` and `Max twig radius`. As the extent of lea development changes over the season, we provide an option to load a csv file with a time dependent leaf presence. We have developed a simple function `make_phenology_file()` that for now allows to generate a *linear* increase and decrease of leaf presence, separated by a period of fully developed canopy:
+
+```{r setup, warning = F, message = F, include=FALSE, fig.height=4}
+library(tidyverse)
+library(agroforlight)
+phenology <- read_delim(file = "phenology.csv", delim = ",", col_names = F)
+ggplot(phenology) +
+  theme_bw() +
+  geom_line(mapping = aes(x= 1:366, y=phenology$X1)) +
+  labs(x = "Day", y = "Leaf growth")
+```
+
+```{r setup_2, warning = F, message = F, eval=FALSE}
+library(tidyverse)
+library(agroforlight)
+
+make_phenology_file("phenology.csv", doy_start_flush = 135, doy_stop_flush = 150, doy_start_fall = 300, doy_stop_fall = 320)
+
+phenology <- read_delim(file = "phenology.csv", col_names = F, delim = ",")
+
+ggplot(phenology) +
+  theme_bw() +
+  geom_line(mapping = aes(x= 1:366, y=phenology$X1)) +
+  labs(x = "Day", y = "Leaf growth")
+```
+
+## Run the simulation with the phenology file
+
+We can now import the `phenology.csv` file into the application, choose the requested `Time step` (60 minutes in this example) and press `Calculate year`. The calculation progress will show as a progress bar on the orange panel:\
+![](img/ts-screenshot-2.png)
+
+This calculation took approximately 7 minutes to complete and results in two files:
+
+-   `sunlight.csv`: containing data from the direct source
+-   `diffuse_light.csv`: containing data from the diffuse sources
+
+We will rename them as `sunlight_tree.csv` and `diffuse_light_tree.csv`.
+
+## Run the simulation without the trees
+
+Just like in the `vignette("example-single")`, we will run a simulation of an empty scene with the same **Geography** and **Sensors** settings and the same `Time step`:
+![](img/ts-screenshot-notree.png)
+We rename the resulting csv files into `sunlight_ref.csv` and `diffuse_light_ref.csv`.
+
+## Calculate the conversion factors
+To convert the data output to actual light intensities, we now need a time series of radiation measurements. In this example, we have data at a ten min interval for an entire year 2020:
+
+```{r readraddata}
+example_data[which.max(example_data$Radiation),]
+
+ggplot(example_data) + 
+  theme_bw() +
+  geom_line(mapping = aes(x=TIMESTAMP, y=Radiation), linewidth = 1.0)
+```
+
+```{r convert_1}
+conv_factors <- make_conv_factors_ts(emptyscene_dir_file = "sunlight_ref.csv", emptyscene_diff_file = "diffuse_light_ref.csv", datetime = example_data$TIMESTAMP, globrad = example_data$Radiation, lat = 50.5, lon = 3.8, start_year = 2019)
+
+head(conv_factors)
+
+```
+
+## Convert the data
+
+```{r convert_2}
+
+converted_data <- convert_data_ts(conv_factors = conv_factors, treescene_dir_file = "sunlight_tree.csv", treescene_diff_file = "diffuse_light_tree.csv", start_year = 2019, lat = 50.5, lon = 3.8)
+head(converted_data)
+```
+
+## Aggregate and visualize
+
+Light distribution pattern for three time points during the year: 
+
+-   around noon on 21 February (doy = 52)
+-   around noon on 21 April (doy = 112)
+-   around noon on 28 June (doy = 180)
+
+```{r distrib, fig.height=12}
+
+converted_data %>%
+  # filter(between(pos_x, -3.5, 3.5)) %>%
+  mutate(doy = yday(datetime)) %>%
+  filter(doy %in% c(52, 112, 180)) %>%
+  filter(hour(datetime) == 13) %>%
+  ggplot() +
+  theme_bw() +
+  facet_wrap(facets = vars(doy), nrow = 3) +
+  geom_tile(aes(x= pos_y, y=pos_x, fill = total_rad)) +
+  scale_fill_viridis_c()
+
+```
+
+Remove edge effects: `filter(between(pos_x, -1.5, 1.5))` 
+
+```{r aggregate}
+converted_data %>%
+  filter(between(pos_x, -1.5, 1.5)) %>%
+  mutate(doy = yday(datetime)) %>%
+  filter(between(datetime, as_datetime("2020-06-28 09:00:00"), as_datetime("2020-06-28 14:00:00")), between(pos_y, -8, 0)) %>%
+  group_by(pos_y, datetime) %>%
+  reframe(total_rad = mean(total_rad)) %>%
+  ggplot() +
+  theme_bw() +
+  geom_line(aes(x= pos_y, y=total_rad, color = as.factor(datetime), group = as.factor(datetime)), linewidth = 1)+
+  scale_fill_viridis_d() +
+  theme(legend.position = 'top')
+
+```
+

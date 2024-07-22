@@ -26,11 +26,11 @@ make_phenology_file <- function(filename, doy_start_flush, doy_stop_flush,
                                 doy_start_fall, doy_stop_fall, shape = "linear"){
   if(shape == "linear"){
     doy <- 1:366
-    y0 <- rep(0, doy_start_flush+11)
-    y1 <- 1/(doy_stop_flush-doy_start_flush)*((doy-11)-doy_start_flush)[(doy_start_flush+12):(doy_stop_flush + 11)]
+    y0 <- rep(0, doy_start_flush+10)
+    y1 <- 1/(doy_stop_flush-doy_start_flush)*((doy-10)-doy_start_flush)[(doy_start_flush+11):(doy_stop_flush + 10)]
     y2 <- rep(1, doy_start_fall-doy_stop_flush)
-    y3 <- (-1/(doy_stop_fall-doy_start_fall)*((doy-11)-doy_start_fall) + 1)[(doy_start_fall+12):(doy_stop_fall + 11)]
-    y4 <- rep(0, 366-(doy_stop_fall + 11))
+    y3 <- (-1/(doy_stop_fall-doy_start_fall)*((doy-10)-doy_start_fall) + 1)[(doy_start_fall+11):(doy_stop_fall + 10)]
+    y4 <- rep(0, 366-(doy_stop_fall + 10))
     y <- tibble(y = c(y0, y1, y2, y3, y4))
   } else {
     stop("for now only a linear shape is possible")

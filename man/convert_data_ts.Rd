@@ -8,7 +8,9 @@ convert_data_ts(
   conv_factors,
   treescene_dir_file,
   treescene_diff_file,
-  start_year
+  start_year,
+  lat,
+  lon
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ convert_data_ts(
 \item{treescene_diff_file}{path to the file of the app output for diffuse light}
 
 \item{start_year}{the starting year of the agroforestry simulation.}
+
+\item{lat}{Latitude of the field in °}
+
+\item{lon}{Longitude of the field in °}
 }
 \value{
 tibble with variables datetime, pos_x, pos_y, direct_rad, diffuse_rad, total_rad

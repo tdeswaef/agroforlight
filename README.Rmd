@@ -40,7 +40,7 @@ The application available at <https://agroforestry.ugent.be> allows to run a 3-D
 library(agroforlight)
 ```
 
-## Light calculation
+## Light distribution calculation
 
 Once the field is designed, one can calculate the light distribution for a single moment, or for an entire year. The `Time of day` and the `Day` settings define the position of the sun (given the `Latitude` in the `Geography` panel), whereas the `Leaf growth` setting defines the presence of leaves on the trees, ranging from 0 (no leaves) to 1 (all leaves fully developed).
 

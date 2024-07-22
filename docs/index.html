@@ -42,6 +42,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/example-single.html">Example processing a single time point</a>
+    <a class="dropdown-item" href="articles/example-timeseries.html">Example processing a time series</a>
   </div>
 </li>
       </ul>
@@ -72,42 +73,23 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"tdeswaef/agroforlight"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="field-design">Field design<a class="anchor" aria-label="anchor" href="#field-design"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>The application available at <a href="https://agroforestry.ugent.be" class="external-link uri">https://agroforestry.ugent.be</a> allows to run a 3-D simulation of an agroforestry field, using LiDAR scans of real trees and designing the field outline.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">agroforlight</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::first' by 'dplyr::first' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::last' by 'dplyr::last' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::between' by 'dplyr::between'</span></span>
-<span><span class="co">#&gt; when loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::wday' by 'lubridate::wday' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::second' by 'lubridate::second'</span></span>
-<span><span class="co">#&gt; when loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::isoweek' by</span></span>
-<span><span class="co">#&gt; 'lubridate::isoweek' when loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::yday' by 'lubridate::yday' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::hour' by 'lubridate::hour' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::year' by 'lubridate::year' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::month' by 'lubridate::month'</span></span>
-<span><span class="co">#&gt; when loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::week' by 'lubridate::week' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::minute' by 'lubridate::minute'</span></span>
-<span><span class="co">#&gt; when loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::mday' by 'lubridate::mday' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'data.table::quarter' by</span></span>
-<span><span class="co">#&gt; 'lubridate::quarter' when loading 'agroforlight'</span></span>
-<span><span class="co">#&gt; Warning: replacing previous import 'magrittr::extract' by 'tidyr::extract' when</span></span>
-<span><span class="co">#&gt; loading 'agroforlight'</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">agroforlight</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="light-distribution-calculation">Light distribution calculation<a class="anchor" aria-label="anchor" href="#light-distribution-calculation"></a>
+</h2>
+<p>Once the field is designed, one can calculate the light distribution for a single moment, or for an entire year. The <code>Time of day</code> and the <code>Day</code> settings define the position of the sun (given the <code>Latitude</code> in the <code>Geography</code> panel), whereas the <code>Leaf growth</code> setting defines the presence of leaves on the trees, ranging from 0 (no leaves) to 1 (all leaves fully developed).</p>
+<p>The <code>Time of day</code> setting refers to the <em>solar time</em>, where a value of <code>12</code> corresponds to the solar noon (highest position of the sun during that day, south), and <code>0</code> corresponds to the lowest position of the sun.</p>
+<p>The <code>Day</code> setting refers to the day number in the <em>solar year</em>, starting at December 21 (<code>Day</code> = 0).</p>
+<p>To enable easy conversion from UTC time to the corresponding input, we developed the <code><a href="reference/timetosolar.html">timetosolar()</a></code> function.</p>
+</div>
+<div class="section level2">
+<h2 id="light-conversion">Light conversion<a class="anchor" aria-label="anchor" href="#light-conversion"></a>
+</h2>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">

@@ -3,5 +3,6 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   example-single: example-single.html
-last_built: 2024-07-22T10:56Z
+  example-timeseries: example-timeseries.html
+last_built: 2024-07-22T20:31Z
 

@@ -33,7 +33,7 @@ trees and designing the field outline.
 library(agroforlight)
 ```
 
-## Light calculation
+## Light distribution calculation
 
 Once the field is designed, one can calculate the light distribution for
 a single moment, or for an entire year. The `Time of day` and the `Day`
