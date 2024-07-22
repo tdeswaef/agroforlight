@@ -27,8 +27,8 @@ make_conv_factors_1 <- function(emptyscene_file,
   if(length(datetime) != length(globrad)) stop("datetime and globrad arguments have unequal length")
 
   diffdir_in <- diffdir_fun(datetime = datetime, globrad = globrad, lat = lat, lon = lon) %>%
-    mutate(sunlight = rad_dir, `diffuse light` = rad_diff) %>%
-    select(sunlight, `diffuse light`) %>%
+    dplyr::mutate(sunlight = rad_dir, `diffuse light` = rad_diff) %>%
+    dplyr::select(sunlight, `diffuse light`) %>%
     tidyr::pivot_longer(cols = everything(), names_to = "lighttype", values_to = "radiation")
   # diff_fun <- approxfun(x=diffdir_in$datetime, y=diffdir_in$rad_diff)
   # dir_fun <- approxfun(x=diffdir_in$datetime, y=diffdir_in$rad_dir)
@@ -36,19 +36,19 @@ make_conv_factors_1 <- function(emptyscene_file,
   out <- data.table::fread(file = emptyscene_file, sep = ",") %>%
     dplyr::mutate(refvalue = rowMeans(across(starts_with("S")))) %>%
     dplyr::select(1, refvalue)
-  out <- out %>% dplyr::mutate(app_day = str_extract_all(colnames(out)[1], "\\d+\\.?\\d*")[[1]][1] %>% as.numeric(),
-                        app_hour = str_extract_all(colnames(out)[1], "\\d+\\.?\\d*")[[1]][2] %>% as.numeric(),
-                        app_pheno = str_extract_all(colnames(out)[1], "\\d+\\.?\\d*")[[1]][3] %>% as.numeric()) %>%
-    dplyr::mutate(lighttype = out[[1]]) %>%
+  out <- out %>% dplyr::mutate(app_day = stringr::str_extract_all(colnames(.)[1], "\\d+\\.?\\d*")[[1]][1] %>% as.numeric(),
+                        app_hour = stringr::str_extract_all(colnames(.)[1], "\\d+\\.?\\d*")[[1]][2] %>% as.numeric(),
+                        app_pheno = stringr::str_extract_all(colnames(.)[1], "\\d+\\.?\\d*")[[1]][3] %>% as.numeric()) %>%
+    dplyr::mutate(lighttype = .[[1]]) %>%
     dplyr::select(lighttype, refvalue, app_day, app_hour, app_pheno) %>%
     dplyr::left_join(diffdir_in, join_by(lighttype)) %>%
-    dplyr::mutate(convfactor = if_else(refvalue == 0, 0, radiation/refvalue)) %>%
+    dplyr::mutate(convfactor = dplyr::if_else(refvalue == 0, 0, radiation/refvalue)) %>%
     dplyr::mutate(datetime = datetime)
 
-  est_app_day <- timetosolar(datetime)$day_for_app
-  est_app_hour <- timetosolar(datetime)$time_for_app %>% round(digits = 2)
+  est_app_day <- timetosolar(datetime, lat = lat, lon = lon)$day_for_app
+  est_app_hour <- timetosolar(datetime, lat = lat, lon = lon)$time_for_app %>% round(digits = 2)
   if(!identical(est_app_day, out$app_day[1])) stop("the date of the app output and the datetime input are not identical")
-  if(!all.equal(est_app_time, out$app_time[1])) stop("the time of the app output and the datetime input are not identical")
+  if(!all.equal(est_app_hour, out$app_hour[1])) stop("the time of the app output and the datetime input are not identical")
 
   return(out)
 

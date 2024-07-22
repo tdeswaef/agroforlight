@@ -4,10 +4,14 @@
 \alias{timetosolar}
 \title{Date and time conversion for input in agroforestry app}
 \usage{
-timetosolar(datetime)
+timetosolar(datetime, lat, lon)
 }
 \arguments{
 \item{datetime}{Single DateTime. Can be a character in UTC (YYYY-MM-DD HH:mm:ss) or a POSIXct}
+
+\item{lat}{Latitude of the field in °}
+
+\item{lon}{Longitude of the field in °}
 }
 \value{
 a list with:
@@ -21,5 +25,5 @@ convert the time in UTC to solar time where 12:00 is solar noon and
 convert the date to solar day where 0 = December 21
 }
 \examples{
-timetosolar("2024-06-21 12:00:00")
+timetosolar("2024-06-21 12:00:00", lat = 50.5, lon = 3.8)
 }
