@@ -72,7 +72,7 @@ ggplot(example_data) +
 ```
 
 ```{r convert_1}
-conv_factors <- make_conv_factors_ts(emptyscene_dir_file = "sunlight_ref.csv", emptyscene_diff_file = "diffuse_light_ref.csv", datetime = example_data$TIMESTAMP, globrad = example_data$Radiation, lat = 50.5, lon = 3.8, start_year = 2019)
+conv_factors <- make_conv_factors_ts(emptyscene_dir_file = "sunlight_ref.csv", emptyscene_diff_file = "diffuse_light_ref.csv", datetime = example_data$TIMESTAMP, globrad = example_data$Radiation, lat = 50.5, lon = 3.8)
 
 head(conv_factors)
 
@@ -82,7 +82,7 @@ head(conv_factors)
 
 ```{r convert_2}
 
-converted_data <- convert_data_ts(conv_factors = conv_factors, treescene_dir_file = "sunlight_tree.csv", treescene_diff_file = "diffuse_light_tree.csv", start_year = 2019, lat = 50.5, lon = 3.8)
+converted_data <- convert_data_ts(conv_factors = conv_factors, treescene_dir_file = "sunlight_tree.csv", treescene_diff_file = "diffuse_light_tree.csv", lat = 50.5, lon = 3.8)
 head(converted_data)
 ```
 

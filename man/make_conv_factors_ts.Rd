@@ -10,8 +10,7 @@ make_conv_factors_ts(
   datetime,
   globrad,
   lat,
-  lon,
-  start_year
+  lon
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ make_conv_factors_ts(
 \item{lat}{Latitude of the field in °}
 
 \item{lon}{Longitude of the field in °}
-
-\item{start_year}{starting year of the 3-D time series simulation}
 }
 \value{
 a tibble with the variables datetime, ConvFactorDiffuse, ConvFactorDirect

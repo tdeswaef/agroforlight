@@ -8,7 +8,6 @@ convert_data_ts(
   conv_factors,
   treescene_dir_file,
   treescene_diff_file,
-  start_year,
   lat,
   lon
 )
@@ -19,8 +18,6 @@ convert_data_ts(
 \item{treescene_dir_file}{path to the file of the app output for direct light}
 
 \item{treescene_diff_file}{path to the file of the app output for diffuse light}
-
-\item{start_year}{the starting year of the agroforestry simulation.}
 
 \item{lat}{Latitude of the field in °}
 
