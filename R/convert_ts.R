@@ -66,7 +66,7 @@ convert_data_ts <- function(conv_factors, treescene_dir_file, treescene_diff_fil
 
   #6. sum of diff and dir + pivot data
   step4 <- step3 %>%
-    dplyr::mutate(across(starts_with("S"), ~ . + step2[[cur_column()]])) %>%
+    dplyr::mutate(across(starts_with("S"), ~ .x + step2[[cur_column()]])) %>%
     dplyr::select(!starts_with("Con")) %>%
     tidytable::pivot_longer(cols = -datetime, names_to = c("pos"), values_to = "total_rad") %>%
     tidytable::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
