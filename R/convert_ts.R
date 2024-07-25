@@ -13,6 +13,7 @@
 #' @import data.table
 #' @import suncalc
 #' @import tidyr
+#' @import tidytable
 
 #' @details
 #' The simulation output should be generated using the application available at [https://agroforestry.ugent.be]
@@ -34,15 +35,15 @@ convert_data_ts <- function(conv_factors, treescene_dir_file, treescene_diff_fil
 
   #2. read the diff file and pivot_longer
   Diffuse_tree <- data.table::fread(file = treescene_diff_file, sep = ",") %>%
-    tidyr::pivot_longer(cols = starts_with("S", ignore.case = F), names_to = c("pos"), values_to = "diff_value") %>%
-    tidyr::separate_wider_delim(pos, names = c("discard", "pos"), delim = " ") %>%
-    tidyr::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
+    tidytable::pivot_longer(cols = starts_with("S", ignore.case = F), names_to = c("pos"), values_to = "diff_value") %>%
+    tidytable::separate_wider_delim(pos, names = c("discard", "pos"), delim = " ") %>%
+    tidytable::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
     dplyr::mutate(pos_x = as.numeric(pos_x), pos_y = as.numeric(pos_y)) %>%
     dplyr::select(-discard)
 
   #3.  read the dir file and find the times per day
   b <- data.table::fread(file = treescene_dir_file, sep = ",")
-  times <- b %>% filter(day == 0) %>% .$`time (s)`
+  times <- b %>% dplyr::filter(day == 0) %>% .$`time (s)`
 
   step1 <- tibble::tibble(doy = conv_factors$datetime %>% yday, year = conv_factors$datetime %>% year) %>% unique %>%
     dplyr::left_join(solarnoons, by = join_by(doy)) %>%
@@ -54,9 +55,9 @@ convert_data_ts <- function(conv_factors, treescene_dir_file, treescene_diff_fil
     dplyr::select(datetime, day, starts_with("S"))
 
   out <- step1 %>%
-    tidyr::pivot_longer(cols = starts_with("S", ignore.case = F), names_to = c("pos"), values_to = "dir_value") %>%
-    tidyr::separate_wider_delim(pos, names = c("discard", "pos"), delim = " ") %>%
-    tidyr::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
+    tidytable::pivot_longer(cols = starts_with("S", ignore.case = F), names_to = c("pos"), values_to = "dir_value") %>%
+    tidytable::separate_wider_delim(pos, names = c("discard", "pos"), delim = " ") %>%
+    tidytable::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
     dplyr::mutate(pos_x = as.numeric(pos_x), pos_y = as.numeric(pos_y)) %>%
     dplyr::left_join(conv_factors, by = join_by(datetime)) %>%
     dplyr::mutate(direct_rad = dir_value*ConvFactorDirect) %>%
