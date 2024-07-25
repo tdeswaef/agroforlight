@@ -24,7 +24,7 @@ convert_data_ts(
 \item{lon}{Longitude of the field in °}
 }
 \value{
-tibble with variables datetime, pos_x, pos_y, direct_rad, diffuse_rad, total_rad
+tibble with variables datetime, pos_x, pos_y, total_rad
 }
 \description{
 Convert the 3D simulation time series data into diffuse, direct and total light intensity
