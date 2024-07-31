@@ -61,13 +61,13 @@ convert_data_ts <- function(conv_factors, treescene_dir_file, treescene_diff_fil
     dplyr::left_join(a, by = join_by(day)) %>%
     dplyr::select(datetime, ConvFactorDiffuse, starts_with("S"))  %>%
     tidyr::drop_na()  %>%
-    dplyr::mutate(across(starts_with("S"), ~ .x* ConvFactorDiffuse, .names = "{.col}")) %>%
-    rename_with(~ str_split_i(., pattern = " ", i = 2), starts_with("S"))
+    dplyr::mutate(dplyr::across(starts_with("S"), ~ .x* ConvFactorDiffuse, .names = "{.col}"))
 
   #6. sum of diff and dir + pivot data
   step4 <- step3 %>%
-    dplyr::mutate(across(starts_with("S"), ~ .x + step2[[cur_column()]])) %>%
+    dplyr::mutate(dplyr::across(dplyr::starts_with("S"), ~ .x + step2[[dplyr::cur_column()]])) %>%
     dplyr::select(!starts_with("Con")) %>%
+    dplyr::rename_with(~ str_split_i(., pattern = " ", i = 2), starts_with("S")) %>%
     tidytable::pivot_longer(cols = -datetime, names_to = c("pos"), values_to = "total_rad") %>%
     tidytable::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
 	dplyr::mutate(pos_x = as.numeric(pos_x), pos_y = as.numeric(pos_y))

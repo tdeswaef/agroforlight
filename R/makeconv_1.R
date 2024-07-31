@@ -34,14 +34,14 @@ make_conv_factors_1 <- function(emptyscene_file,
   # dir_fun <- approxfun(x=diffdir_in$datetime, y=diffdir_in$rad_dir)
 
   out <- data.table::fread(file = emptyscene_file, sep = ",") %>%
-    dplyr::mutate(refvalue = rowMeans(across(starts_with("S")))) %>%
+    dplyr::mutate(refvalue = rowMeans(dplyr::across(starts_with("S")))) %>%
     dplyr::select(1, refvalue)
   out <- out %>% dplyr::mutate(app_day = stringr::str_extract_all(colnames(.)[1], "\\d+\\.?\\d*")[[1]][1] %>% as.numeric(),
                         app_hour = stringr::str_extract_all(colnames(.)[1], "\\d+\\.?\\d*")[[1]][2] %>% as.numeric(),
                         app_pheno = stringr::str_extract_all(colnames(.)[1], "\\d+\\.?\\d*")[[1]][3] %>% as.numeric()) %>%
     dplyr::mutate(lighttype = .[[1]]) %>%
     dplyr::select(lighttype, refvalue, app_day, app_hour, app_pheno) %>%
-    dplyr::left_join(diffdir_in, join_by(lighttype)) %>%
+    dplyr::left_join(diffdir_in, dplyr::join_by(lighttype)) %>%
     dplyr::mutate(convfactor = dplyr::if_else(refvalue == 0, 0, radiation/refvalue)) %>%
     dplyr::mutate(datetime = datetime)
 
