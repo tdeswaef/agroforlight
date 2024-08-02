@@ -47,7 +47,7 @@ ggplot(phenology) +
 We can now import the `phenology.csv` file into the application, choose the requested `Time step` (60 minutes in this example) and press `Calculate year`. The calculation progress will show as a progress bar on the orange panel:\
 ![](img/ts-screenshot-2.png)
 
-This calculation took approximately 7 minutes to complete and results in two files:
+This calculation took approximately 3 minutes (check if your browser uses your best GPU card) to complete and results in two files:
 
 -   `sunlight.csv`: containing data from the direct source
 -   `diffuse_light.csv`: containing data from the diffuse sources
@@ -60,30 +60,25 @@ Just like in the `vignette("example-single")`, we will run a simulation of an em
 ![](img/ts-screenshot-notree.png)
 We rename the resulting csv files into `sunlight_ref.csv` and `diffuse_light_ref.csv`.
 
-## Calculate the conversion factors
+## Convert the data
 To convert the data output to actual light intensities, we now need a time series of radiation measurements. In this example, we have data at a ten min interval for an entire year 2020:
 
 ```{r readraddata}
-example_data[which.max(example_data$Radiation),]
 
 ggplot(example_data) + 
   theme_bw() +
-  geom_line(mapping = aes(x=TIMESTAMP, y=Radiation), linewidth = 1.0)
+  geom_line(mapping = aes(x=datetime, y=radiation), linewidth = 1.0)
 ```
+
 
 ```{r convert_1}
-conv_factors <- make_conv_factors_ts(emptyscene_dir_file = "sunlight_ref.csv", emptyscene_diff_file = "diffuse_light_ref.csv", datetime = example_data$TIMESTAMP, globrad = example_data$Radiation, lat = 50.5, lon = 3.8)
-
-head(conv_factors)
-
-```
-
-## Convert the data
-
-```{r convert_2}
-
-converted_data <- convert_data_ts(conv_factors = conv_factors, treescene_dir_file = "sunlight_tree.csv", treescene_diff_file = "diffuse_light_tree.csv", lat = 50.5, lon = 3.8)
+converted_data <- convert_afl_ts(treescene_dir_file = "sunlight_tree.csv",
+                                 treescene_diff_file = "diffuse_light_tree.csv",
+                                 datetime = example_data$datetime, globrad = example_data$radiation,
+                                 lat = 50.9, lon = 3.78, 
+                                 sensor_size = 1, inclination = 0, rotation = 0)
 head(converted_data)
+
 ```
 
 ## Aggregate and visualize

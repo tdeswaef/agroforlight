@@ -1,6 +1,6 @@
 
 
-#' Calculate the diffuse and direct component of solar radiation on a horizontal plane
+#' Calculate the diffuse and direct components of solar radiation and solar position
 #'
 #' @param globrad Incoming global radiation in W m-2. Its length should match length of `datetime`.
 #' @param lat Latitude of the field in °
@@ -25,8 +25,8 @@
 #' @export
 #'
 #' @examples
-#' out <- diffdir_fun(globrad = 600, lat = 50.95, lon = 3.8, datetime = "2022-06-21 12:00:00")
-diffdir_fun <- function(datetime, globrad, lat, lon){
+#' out <- calc_light_attr(globrad = 600, lat = 50.95, lon = 3.8, datetime = "2022-06-21 12:00:00")
+calc_light_attr <- function(datetime, globrad, lat, lon){
 
   if(length(datetime) != length(globrad)) stop("datetime and globrad arguments have unequal length")
 
@@ -48,3 +48,17 @@ diffdir_fun <- function(datetime, globrad, lat, lon){
   return(out)
 
 }
+
+#'
+
+#' @references
+#' {title = {Separating the diffuse and direct component of global radiation and its implications for modeling canopy photosynthesis {Part} {II}. {Calculation} of canopy photosynthesis},
+#' volume = {38},
+#' issn = {0168-1923},url = {https://www.sciencedirect.com/science/article/pii/0168192386900614},
+#' doi = {10.1016/0168-1923(86)90061-4},language = {en},
+#' number = {1},
+#' journal = {Agricultural and Forest Meteorology},
+#' author = {Spitters, C. J. T.},
+#' month = oct,year = {1986},
+#' pages = {231--242},
+#' }

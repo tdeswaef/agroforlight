@@ -15,8 +15,8 @@
 #' @export
 #'
 #' @examples
-#' timetosolar("2024-06-21 12:00:00", lat = 50.5, lon = 3.8)
-timetosolar <- function(datetime, lat, lon){
+#' convert_utc_solar("2024-06-21 12:00:00", lat = 50.5, lon = 3.8)
+convert_utc_solar <- function(datetime, lat, lon){
   origin <- origin <- lubridate::as_date(paste0(year(datetime)-1, "-12-31"))
   day <- yday(datetime)
   day_for_app <- ifelse(day >=356, day - 366+10, day + 10)

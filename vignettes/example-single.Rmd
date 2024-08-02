@@ -18,14 +18,14 @@ knitr::opts_chunk$set(
 
 In the [agroforestry app](https://agroforestry.ugent.be), you can select a single moment for a simulation. This moment is defined by the `Time of day`, the `Day` and the `Leaf growth` setting.
 
-To enable easy conversion from UTC time to the corresponding input, we developed the `timetosolar()` function:
+To enable easy conversion from UTC time to the corresponding input, we developed the `convert_utc_solar()` function:
 
 ```{r input, warning=FALSE, message = F}
 library(tidyverse)
 library(agroforlight)
 
 datetime <- "2024-05-26 11:00:00"
-timetosolar(datetime = datetime, lat = 50.5, lon = 3.8)
+convert_utc_solar(datetime = datetime, lat = 50.5, lon = 3.8)
 ```
 
 ## Run the 3-D calculation
@@ -54,24 +54,16 @@ We will save the result of the empty scene under the name `moment_157_11_100_ref
 
 Consider a measurement for global radiation of 500 W m<sup>-2</sup>, and a position on the world defined by latitude of 50.5 °N and a longitude of 3.8 °E. The latitude should be the same as provided in the <https://agroforestry.ugent.be> application.
 
-We first calculate the conversion factors for the direct and diffuse radiation as follows:
+We calculate the conversion as follows:
 
 ```{r convert_1}
 
-Reference <- "moment_157_11_100_ref.csv"
 TreeRows <- "moment_157_11_100_tree.csv"
-
-conv_factors <- make_conv_factors_1(emptyscene_file = Reference, datetime = datetime, globrad = 500, lat = 50.5, lon = 3.8)
-conv_factors
-
+converted_data <- convert_afl_1(treescene_file = TreeRows, globrad = 500, lat = 50.9, lon = 3.78)
+head(converted_data)
 ```
 
-Then we use these factors to re-calculate the absolute values from the model output with tree rows:
 
-```{r convert_2}
-converted_data <- convert_data_1(conv_factors = conv_factors, treescene_file = TreeRows)
-
-```
 
 This can be visualized using `ggplot2::geom_tile()`:
 
