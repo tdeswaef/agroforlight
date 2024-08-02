@@ -25,10 +25,25 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/reference/calc_light_attr.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_afl_1.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_afl_ts.html</loc>
+  </url>
+  <url>
     <loc>/reference/convert_data_1.html</loc>
   </url>
   <url>
     <loc>/reference/convert_data_ts.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_solar_utc.html</loc>
+  </url>
+  <url>
+    <loc>/reference/convert_utc_solar.html</loc>
   </url>
   <url>
     <loc>/reference/diffdir_fun.html</loc>
