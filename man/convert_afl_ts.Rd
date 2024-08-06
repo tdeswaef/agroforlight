@@ -13,7 +13,8 @@ convert_afl_ts(
   lon,
   sensor_size = 1,
   inclination = 0,
-  rotation = 0
+  rotation = 0,
+  out_components = F
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ convert_afl_ts(
 \item{inclination}{Inclination setting (Geography) of the field simulation in degrees}
 
 \item{rotation}{Rotation setting (Geography) of the field simulation in degrees}
+
+\item{out_components}{if the output should return direct and diffuse components of radiation (default = F, for speed)}
 }
 \value{
 tibble with variables datetime, pos_x, pos_y, total_rad
