@@ -66,9 +66,12 @@ moment and are based on the principles described below.
 The theoretical maximum value per sensor is the sensor’s surface area
 ($A$), which results from the `Size` and `Count` settings in the
 `Sensors` panel:
-$A = \frac{Size_{x} \times Size_{y}}{Count_{x} \times Count_{y}}$. This
-value can only be reached for the sun source, when the sun is in the
-zenith, and no scene objects are present between the sun and the sensor.
+
+$$A = \frac{Size_{x} \times Size_{y}}{Count_{x} \times Count_{y}}$$.
+
+This value can only be reached for the sun source, when the sun is in
+the zenith, and no scene objects are present between the sun and the
+sensor.
 
 The reference, un-shaded value $A_{0}$ can be calculated from from the
 following formula:

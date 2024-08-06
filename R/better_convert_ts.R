@@ -64,26 +64,51 @@ convert_afl_ts <- function(treescene_dir_file, treescene_diff_file, datetime, gl
     dplyr::mutate(datetime = ymd(paste0(year, "-01-01")) + days(doy-1) + seconds(`time (s)`) - diffnoon) %>%
     dplyr::mutate(day = if_else(doy > 355, doy-356, doy + 10)) %>% select(datetime, day, `time (s)`) %>%
     dplyr::mutate(cf_dir = cf_dir_fun(datetime), cf_dif = cf_diff_fun((datetime))) %>% drop_na()
+#
+#   #5. calculate the direct radiation
+#   step2 <- step1 %>%
+#     dplyr::left_join(b, by = join_by(day, `time (s)`)) %>%
+#     dplyr::select(datetime, cf_dir, starts_with("S"))  %>%
+#     dplyr::mutate(across(starts_with("S"), ~ .x* cf_dir, .names = "{.col}"))
+#
+#   #6. Calculate the diffuse radiation
+#   step3 <- step1 %>%
+#     dplyr::left_join(a, by = join_by(day)) %>%
+#     dplyr::select(datetime, cf_dif, starts_with("S"))  %>%
+#     dplyr::mutate(dplyr::across(starts_with("S"), ~ .x* cf_dif, .names = "{.col}"))
+#
+#   #7. sum of diff and dir + pivot data
+#   step4 <- step3 %>%
+#     dplyr::mutate(dplyr::across(dplyr::starts_with("S"), ~ .x + step2[[dplyr::cur_column()]])) %>%
+#     dplyr::select(!starts_with("cf_")) %>%
+#     dplyr::rename_with(~ str_split_i(., pattern = " ", i = 2), starts_with("S")) %>%
+#     tidytable::pivot_longer(cols = -datetime, names_to = c("pos"), values_to = "total_rad") %>%
+#     tidytable::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
+#     dplyr::mutate(pos_x = as.numeric(pos_x), pos_y = as.numeric(pos_y))
 
   #5. calculate the direct radiation
   step2 <- step1 %>%
     dplyr::left_join(b, by = join_by(day, `time (s)`)) %>%
     dplyr::select(datetime, cf_dir, starts_with("S"))  %>%
-    dplyr::mutate(across(starts_with("S"), ~ .x* cf_dir, .names = "{.col}"))
+    dplyr::mutate(across(starts_with("S"), ~ .x* cf_dir, .names = "{.col}")) %>%
+    dplyr::select(!starts_with("cf_")) %>%
+    dplyr::rename_with(~ str_split_i(., pattern = " ", i = 2), starts_with("S")) %>%
+    tidytable::pivot_longer(cols = -datetime, names_to = c("pos"), values_to = "direct_rad")
 
   #6. Calculate the diffuse radiation
   step3 <- step1 %>%
     dplyr::left_join(a, by = join_by(day)) %>%
     dplyr::select(datetime, cf_dif, starts_with("S"))  %>%
-    dplyr::mutate(dplyr::across(starts_with("S"), ~ .x* cf_dif, .names = "{.col}"))
-
-  #6. sum of diff and dir + pivot data
-  step4 <- step3 %>%
-    dplyr::mutate(dplyr::across(dplyr::starts_with("S"), ~ .x + step2[[dplyr::cur_column()]])) %>%
+    dplyr::mutate(dplyr::across(starts_with("S"), ~ .x* cf_dif, .names = "{.col}")) %>%
     dplyr::select(!starts_with("cf_")) %>%
     dplyr::rename_with(~ str_split_i(., pattern = " ", i = 2), starts_with("S")) %>%
-    tidytable::pivot_longer(cols = -datetime, names_to = c("pos"), values_to = "total_rad") %>%
+    tidytable::pivot_longer(cols = -datetime, names_to = c("pos"), values_to = "diffuse_rad")
+
+  #7. sum of diff and dir
+  step4 <- step3 %>%
+    dplyr::left_join(step2, by = join_by(datetime, pos)) %>%
     tidytable::separate_wider_delim(pos, names = c("pos_x", "pos_y"), delim = "|") %>%
+    dplyr::mutate(total_rad = direct_rad + diffuse_rad) %>%
     dplyr::mutate(pos_x = as.numeric(pos_x), pos_y = as.numeric(pos_y))
 
   return(step4)
