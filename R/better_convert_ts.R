@@ -5,7 +5,7 @@
 #' @param treescene_dir_file path to the file of the app output for direct light
 #' @param treescene_diff_file path to the file of the app output for diffuse light
 #' @param datetime Single or multiple DateTime. Can be a character in UTC (YYYY-MM-DD HH:mm:ss) or a POSIXct
-#' @param globrad Incoming global radiation in W m-2
+#' @param globrad Incoming global radiation in W m-2 corresponding to `datetime`. This should have a length equal to `datetime`.
 #' @param lat Latitude of the field in °
 #' @param lon Longitude of the field in °
 #' @param sensor_size surface area of a sensor in the sensor field in m²

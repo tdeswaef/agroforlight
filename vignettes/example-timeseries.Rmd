@@ -38,7 +38,7 @@ phenology <- read_delim(file = "phenology.csv", col_names = F, delim = ",")
 
 ggplot(phenology) +
   theme_bw() +
-  geom_line(mapping = aes(x= 1:366, y=phenology$X1)) +
+  geom_line(mapping = aes(x= 1:366, y=phenology$X1), linewidth = 1) +
   labs(x = "Day", y = "Leaf growth")
 ```
 
@@ -47,18 +47,10 @@ ggplot(phenology) +
 We can now import the `phenology.csv` file into the application, choose the requested `Time step` (60 minutes in this example) and press `Calculate year`. The calculation progress will show as a progress bar on the orange panel:\
 ![](img/ts-screenshot-2.png)
 
-This calculation took approximately 3 minutes (check if your browser uses your best GPU card) to complete and results in two files:
+This calculation takes approximately 3 minutes (check if your browser uses your best GPU card) to complete and results in two files:
 
 -   `sunlight.csv`: containing data from the direct source
 -   `diffuse_light.csv`: containing data from the diffuse sources
-
-We will rename them as `sunlight_tree.csv` and `diffuse_light_tree.csv`.
-
-## Run the simulation without the trees
-
-Just like in the `vignette("example-single")`, we will run a simulation of an empty scene with the same **Geography** and **Sensors** settings and the same `Time step`:
-![](img/ts-screenshot-notree.png)
-We rename the resulting csv files into `sunlight_ref.csv` and `diffuse_light_ref.csv`.
 
 ## Convert the data
 To convert the data output to actual light intensities, we now need a time series of radiation measurements. In this example, we have data at a ten min interval for an entire year 2020:
@@ -70,13 +62,14 @@ ggplot(example_data) +
   geom_line(mapping = aes(x=datetime, y=radiation), linewidth = 1.0)
 ```
 
+We then run the function `convert_afl_ts()` to convert the output in m<sup>-2</sup> into W m<sup>-2</sup>. Thereto, we provide the output of the 3D simulation (`treescene_dir_file = "sunlight.csv"` and `treescene_diff_file = "diffuse_light.csv"`), the radiation data (`datetime = example_data$datetime and globrad = example_data$radiation`), and the settings of the simulation (`lat = 50.9, lon = 3.78, sensor_size = 1, inclination = 0, rotation = 0`). As we are not interested in the particular direct and diffuse components, we set the `out_components` argument at `FALSE`:
 
 ```{r convert_1}
-converted_data <- convert_afl_ts(treescene_dir_file = "sunlight_tree.csv",
-                                 treescene_diff_file = "diffuse_light_tree.csv",
+converted_data <- convert_afl_ts(treescene_dir_file = "sunlight.csv",
+                                 treescene_diff_file = "diffuse_light.csv",
                                  datetime = example_data$datetime, globrad = example_data$radiation,
                                  lat = 50.9, lon = 3.78, 
-                                 sensor_size = 1, inclination = 0, rotation = 0)
+                                 sensor_size = 1, inclination = 0, rotation = 0, out_components = F)
 head(converted_data)
 
 ```

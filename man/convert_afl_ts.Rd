@@ -24,7 +24,7 @@ convert_afl_ts(
 
 \item{datetime}{Single or multiple DateTime. Can be a character in UTC (YYYY-MM-DD HH:mm:ss) or a POSIXct}
 
-\item{globrad}{Incoming global radiation in W m-2}
+\item{globrad}{Incoming global radiation in W m-2 corresponding to \code{datetime}. This should have a length equal to \code{datetime}.}
 
 \item{lat}{Latitude of the field in °}
 

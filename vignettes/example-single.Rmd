@@ -42,14 +42,6 @@ Pressing `Calculate moment` will generate and download a csv file with the name 
 
 We will save it here under the name `moment_157_11_100_tree.csv`.
 
-## Run an empty scene for reference
-
-Because the application does not provide light intensities as outputs, we should run the same field set-up, without the trees: so the same `Latitude`, `Rotation` and `Inclination` as **Geography** settings, the same `Size`, `Count`, `Render resolution` and `Diffusion lights` as **Sensor** settings, and the same `Time of day` and `Day` **Calculation** settings: ![](img/single-screenshot-notree.png)
-
-This is a downside of the application, as it requires an additional step, but it can also serve as a quick quality check.
-
-We will save the result of the empty scene under the name `moment_157_11_100_ref.csv`.
-
 ## Convert the app output to real-world values
 
 Consider a measurement for global radiation of 500 W m<sup>-2</sup>, and a position on the world defined by latitude of 50.5 °N and a longitude of 3.8 °E. The latitude should be the same as provided in the <https://agroforestry.ugent.be> application.
