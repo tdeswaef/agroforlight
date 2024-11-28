@@ -8,10 +8,10 @@
 
 The goal of `agroforlight` is to provide functions that enable
 processing results from the 3-D tool for agroforestry light simulations
-available at <https://agroforestry.ugent.be>.
+available at <https://agroforestry.ilvo.be/agroforlight/>.
 
 [![Screenshot from
-https://agroforestry.ugent.be](man/figures/printscreen.png)](https://agroforestry.ugent.be)
+https://agroforestry.ilvo.be/agroforlight/](man/figures/printscreen.png)](https://agroforestry.ilvo.be/agroforlight/)
 
 ## Installation
 
@@ -25,13 +25,18 @@ devtools::install_github("tdeswaef/agroforlight")
 
 ## Field design
 
-The application available at <https://agroforestry.ugent.be> allows to
-run a 3-D simulation of an agroforestry field, using LiDAR scans of real
-trees and designing the field outline.
+The application available at <https://agroforestry.ilvo.be/agroforlight>
+allows to run a 3-D simulation of an agroforestry field, using LiDAR
+scans of real trees and designing the field outline. This website can be
+launched using the `launch_app()` function.
 
-``` r
-library(agroforlight)
-```
+    library(agroforlight)
+    launch_app()
+
+In the [agroforestry app](https://agroforestry.ilvo.be/agroforlight),
+you can upload your own tree using a `.obj` file. Information on the
+.obj file can be found on the [RAMI
+website](https://rami-benchmark.jrc.ec.europa.eu/_www/phase/phase_exp.php?strTag=level3&strNext=filter_testcases&strPhase=RAMI5&strTagValue=ACT_HET51_WWO_TLS).
 
 ## Light distribution calculation
 
@@ -56,12 +61,12 @@ for input, we developed the `convert_utc_solar()` and
 ## Light conversion
 
 The output of the application available at
-<https://agroforestry.ugent.be> contains a value per sensor per time
-point. The unit of this value is $m^2$, as this corresponds to the area
-of that sensor $A_{s}$ that can be *seen* by the sun, and the diffuse
-sources. The calculations for conversion are covered by the functions
-`convert_afl_ts()` for time series and `convert_afl_1()` for a single
-moment and are based on the principles described below.
+<https://agroforestry.ilvo.be/agroforlight/> contains a value per sensor
+per time point. The unit of this value is $m^2$, as this corresponds to
+the area of that sensor $A_{s}$ that can be *seen* by the sun, and the
+diffuse sources. The calculations for conversion are covered by the
+functions `convert_afl_ts()` for time series and `convert_afl_1()` for a
+single moment and are based on the principles described below.
 
 The theoretical maximum value per sensor is the sensor’s surface area
 ($A$), which results from the `Size` and `Count` settings in the

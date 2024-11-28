@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## First set up the correct day and time
 
-In the [agroforestry app](https://agroforestry.ugent.be), you can select a single moment for a simulation. This moment is defined by the `Time of day`, the `Day` and the `Leaf growth` setting.
+In the [agroforestry app](https://agroforestry.ilvo.be/agroforlight/), you can select a single moment for a simulation. This moment is defined by the `Time of day`, the `Day` and the `Leaf growth` setting.
 
 To enable easy conversion from UTC time to the corresponding input, we developed the `convert_utc_solar()` function:
 
@@ -44,7 +44,7 @@ We will save it here under the name `moment_157_11_100_tree.csv`.
 
 ## Convert the app output to real-world values
 
-Consider a measurement for global radiation of 500 W m<sup>-2</sup>, and a position on the world defined by latitude of 50.5 °N and a longitude of 3.8 °E. The latitude should be the same as provided in the <https://agroforestry.ugent.be> application.
+Consider a measurement for global radiation of 500 W m<sup>-2</sup>, and a position on the world defined by latitude of 50.5 °N and a longitude of 3.8 °E. The latitude should be the same as provided in the <https://agroforestry.ilvo.be/agroforlight/> application.
 
 We calculate the conversion as follows:
 
