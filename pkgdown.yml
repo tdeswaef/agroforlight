@@ -1,8 +1,8 @@
-pandoc: 3.1.12.1
+pandoc: '3.2'
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   example-single: example-single.html
   example-timeseries: example-timeseries.html
-last_built: 2024-08-12T11:37Z
+last_built: 2024-11-28T15:13Z
 

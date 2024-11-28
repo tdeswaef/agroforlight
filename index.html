@@ -71,8 +71,8 @@
 </div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>The goal of <code>agroforlight</code> is to provide functions that enable processing results from the 3-D tool for agroforestry light simulations available at <a href="https://agroforestry.ugent.be" class="external-link uri">https://agroforestry.ugent.be</a>.</p>
-<p><a href="https://agroforestry.ugent.be" class="external-link"><img src="reference/figures/printscreen.png" alt="Screenshot from https://agroforestry.ugent.be"></a></p>
+<p>The goal of <code>agroforlight</code> is to provide functions that enable processing results from the 3-D tool for agroforestry light simulations available at <a href="https://agroforestry.ilvo.be/agroforlight/" class="external-link uri">https://agroforestry.ilvo.be/agroforlight/</a>.</p>
+<p><a href="https://agroforestry.ilvo.be/agroforlight/" class="external-link"><img src="reference/figures/printscreen.png" alt="Screenshot from https://agroforestry.ilvo.be/agroforlight/"></a></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -84,9 +84,10 @@
 <div class="section level2">
 <h2 id="field-design">Field design<a class="anchor" aria-label="anchor" href="#field-design"></a>
 </h2>
-<p>The application available at <a href="https://agroforestry.ugent.be" class="external-link uri">https://agroforestry.ugent.be</a> allows to run a 3-D simulation of an agroforestry field, using LiDAR scans of real trees and designing the field outline.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">agroforlight</span><span class="op">)</span></span></code></pre></div>
+<p>The application available at <a href="https://agroforestry.ilvo.be/agroforlight" class="external-link uri">https://agroforestry.ilvo.be/agroforlight</a> allows to run a 3-D simulation of an agroforestry field, using LiDAR scans of real trees and designing the field outline. This website can be launched using the <code><a href="reference/launch_app.html">launch_app()</a></code> function.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(agroforlight)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">launch_app</span>()</span></code></pre></div>
+<p>In the <a href="https://agroforestry.ilvo.be/agroforlight" class="external-link">agroforestry app</a>, you can upload your own tree using a <code>.obj</code> file. Information on the .obj file can be found on the <a href="https://rami-benchmark.jrc.ec.europa.eu/_www/phase/phase_exp.php?strTag=level3&amp;strNext=filter_testcases&amp;strPhase=RAMI5&amp;strTagValue=ACT_HET51_WWO_TLS" class="external-link">RAMI website</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="light-distribution-calculation">Light distribution calculation<a class="anchor" aria-label="anchor" href="#light-distribution-calculation"></a>
@@ -99,12 +100,12 @@
 <div class="section level2">
 <h2 id="light-conversion">Light conversion<a class="anchor" aria-label="anchor" href="#light-conversion"></a>
 </h2>
-<p>The output of the application available at <a href="https://agroforestry.ugent.be" class="external-link uri">https://agroforestry.ugent.be</a> contains a value per sensor per time point. The unit of this value is <span class="math inline"><em>m</em><sup>2</sup></span>, as this corresponds to the area of that sensor <span class="math inline"><em>A</em><sub><em>s</em></sub></span> that can be <em>seen</em> by the sun, and the diffuse sources. The calculations for conversion are covered by the functions <code><a href="reference/convert_afl_ts.html">convert_afl_ts()</a></code> for time series and <code><a href="reference/convert_afl_1.html">convert_afl_1()</a></code> for a single moment and are based on the principles described below.</p>
+<p>The output of the application available at <a href="https://agroforestry.ilvo.be/agroforlight/" class="external-link uri">https://agroforestry.ilvo.be/agroforlight/</a> contains a value per sensor per time point. The unit of this value is <span class="math inline"><em>m</em><sup>2</sup></span>, as this corresponds to the area of that sensor <span class="math inline"><em>A</em><sub><em>s</em></sub></span> that can be <em>seen</em> by the sun, and the diffuse sources. The calculations for conversion are covered by the functions <code><a href="reference/convert_afl_ts.html">convert_afl_ts()</a></code> for time series and <code><a href="reference/convert_afl_1.html">convert_afl_1()</a></code> for a single moment and are based on the principles described below.</p>
 <p>The theoretical maximum value per sensor is the sensor’s surface area (<span class="math inline"><em>A</em></span>), which results from the <code>Size</code> and <code>Count</code> settings in the <code>Sensors</code> panel:</p>
 <p><span class="math display">$$A = \frac{Size_{x} \times Size_{y}}{Count_{x} \times Count_{y}}$$</span>.</p>
 <p>This value can only be reached for the sun source, when the sun is in the zenith, and no scene objects are present between the sun and the sensor.</p>
 <p>The reference, un-shaded value <span class="math inline"><em>A</em><sub>0</sub></span> can be calculated from from the following formula:</p>
-<p><span class="math display"><em>A</em><sub>0</sub> = cos (<em>θ</em>) × cos (<em>β</em>) + <em>s</em><em>i</em><em>n</em>(<em>θ</em>) × sin (<em>β</em>) × cos (<em>ϕ</em>−<em>γ</em>)</span> where <span class="math inline"><em>θ</em></span> is the solar angle from the zenith, <span class="math inline"><em>β</em></span> is the inclination angle of the field, <span class="math inline"><em>ϕ</em></span> is the solar azimuthal angle from the north and <span class="math inline"><em>γ</em></span> is the rotation angle from the field. As the diffuse sources remain the same over latitudes and times, its reference value <span class="math inline"><em>A</em><sub>0</sub></span>, resulting from the weighted average over the available sources, has the constant value around 0.58.</p>
+<p><span class="math display"><em>A</em><sub>0</sub> = cos (<em>θ</em>) × cos (<em>β</em>) + <em>s</em><em>i</em><em>n</em>(<em>θ</em>) × sin (<em>β</em>) × cos (<em>ϕ</em> − <em>γ</em>)</span> where <span class="math inline"><em>θ</em></span> is the solar angle from the zenith, <span class="math inline"><em>β</em></span> is the inclination angle of the field, <span class="math inline"><em>ϕ</em></span> is the solar azimuthal angle from the north and <span class="math inline"><em>γ</em></span> is the rotation angle from the field. As the diffuse sources remain the same over latitudes and times, its reference value <span class="math inline"><em>A</em><sub>0</sub></span>, resulting from the weighted average over the available sources, has the constant value around 0.58.</p>
 <p>To scale the application output to the real light intensity, one needs a data set of un-shaded solar radiation at the required temporal resolution (<span class="math inline"><em>I</em><sub>0</sub></span>). This data set is split up in diffuse and direct components using the <code><a href="reference/calc_light_attr.html">calc_light_attr()</a></code> function. The direct and diffuse fractions are then used to re-scale the application output for each sensor and light fraction (subscript <span class="math inline"><em>f</em></span> for <em>diffuse</em> and <em>direct</em>):</p>
 <p><span class="math display">$$ I_{s,f} = I_{0,f} \times \frac{A_{s,f}}{A_{0,f}} $$</span></p>
 </div>
